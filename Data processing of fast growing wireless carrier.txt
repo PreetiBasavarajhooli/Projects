@@ -1,0 +1,224 @@
+Exploring the HDFS Command Line Interface 
+hdfs dfs -ls /
+hdfs dfs -ls /user
+hdfs dfs -ls /user/dbhdfs
+hdfs dfs -mkdir /nozirev
+cd $DEV1DATA
+hdfs dfs -put kb /nozirev/
+hdfs dfs -ls /nozirev/kb
+$ hdfs dfs -put calllogs /nozirev/ 
+$ hdfs dfs -ls /nozirev/calllogs 
+$ hdfs dfs -rm -r /nozirev/calllogs 
+$ hdfs dfs -cat /nozirev/kb/KBDOC-00289.html | head \ -n 20 
+hdfs dfs -get \ 
+/nozirev/kb/KBDOC-00289.html ~/article.html	
+$ less ~/article.html 
+hdfs dfs  
+
+Sqoop – importing the data using sqoop
+sqoop help
+sqoop list-tables \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs 
+sqoop import –help
+$ sqoop import \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs \ 
+  --table accounts \   --target-dir /nozirev/accounts \ 
+  --null-non-string '\\N'
+
+hdfs dfs -ls /nozirev/accounts
+hdfs dfs -tail /nozirev/accounts/part-m-00000 
+$ hdfs dfs -tail /nozirev/accounts/part-m-00001 
+$ hdfs dfs -tail /nozirev/accounts/part-m-00002 
+$ hdfs dfs -tail /nozirev/accounts/part-m-00003 
+sqoop import \ 
+ --connect jdbc:mysql://localhost/nozirev \ 
+ --username dbhdfs --password dbhdfs \ 
+ --incremental append \ 
+ --null-non-string '\\N' \ 
+--table accounts \ 
+ --target-dir /nozirev/accounts \ 
+ --check-column acct_num \ 
+ --last-value <largest_acct_num> 	
+hdfs dfs -ls /nozirev/accounts
+hdfs dfs -cat /nozirev/accounts/part-m-0000[456]
+sqoop eval \ 
+  --query "SELECT * FROM webpage LIMIT 10" \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs 
+$ sqoop import \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs \ 
+  --table webpage \ 
+  --target-dir /nozirev/webpage \ 
+  --fields-terminated-by "\t" 
+Hive – viewing the data using Hive
+CREATE EXTERNAL TABLE webpage     (page_id SMALLINT,      name STRING,     assoc_files STRING)    ROW FORMAT DELIMITED  
+      FIELDS TERMINATED BY '\t' 
+      LOCATION '/nozirev/webpage'
+
+SELECT * FROM webpage WHERE name LIKE "ifruit%" 
+$ sqoop import \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs \ 
+  --fields-terminated-by '\t' \ 
+  --table device \ 
+  --hive-import 
+INVALIDATE METADATA 
+SELECT * FROM device LIMIT 10 
+Data format
+$ cd $DEV1/exercises/data-format/ 
+$ sqoop import \ 
+  --connect jdbc:mysql://localhost/nozirev \ 
+  --username dbhdfs --password dbhdfs \ 
+  --table accounts \ 
+  --target-dir /nozirev/accounts_avro \ 
+  --null-non-string '\\N' \ 
+  --as-avrodatafile 
+$ hdfs dfs -get \ 
+ /nozirev/accounts_avro/part-m-00000.avro 
+$ avro-tools tojson part-m-00000.avro | more 
+hdfs dfs -put accounts.avsc /nozirev/
+CREATE EXTERNAL TABLE accounts_avro    STORED AS AVRO  
+  LOCATION '/nozirev/accounts_avro' 
+  TBLPROPERTIES ('avro.schema.url'= 
+    'hdfs:/nozirev/accounts.avsc') 
+SELECT * FROM accounts_avro LIMIT 10 
+Partition Data In Impala and Hive
+CREATE EXTERNAL TABLE accounts_by_areacode (     acct_num INT,     first_name STRING,     last_name STRING,     phone_number STRING)    PARTITIONED BY (areacode STRING) 
+  ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY ',' 
+  LOCATION '/nozirev/accounts_by_areacode' 
+SELECT acct_num, first_name, last_name,     phone_number, SUBSTR(phone_number,1,3) AS areacode    FROM accounts_avro 
+SELECT * FROM accounts_by_areacode LIMIT 10 
+Flume
+
+hdfs dfs -mkdir -p /nozirev/weblogs
+sudo mkdir -p /flume/weblogs_spooldir
+sudo chmod a+w -R /flume
+/flume/weblogs_spooldir
+flume-ng agent --conf /etc/flume-ng/conf \ 
+ --conf-file solution/spooldir.conf \ 
+ --name agent1 -Dflume.root.logger=INFO,console 
+$ cd $DEV1/exercises/flume 
+$ ./copy-move-weblogs.sh /flume/weblogs_spooldir 
+$ $DEV1/exercises/flume/script/rng_feed.py 
+Spark—Data processing using Spark
+$ pyspark 
+pyspark> sc  pyspark> mydata = sc.textFile(\ "file:/home/dbhdfs/dbhdfs_materials/\ data/frostroad.txt") 
+scala> val mydata = sc. 
+textFile("file:/home/dbhdfs/dbhdfs_materials/data/f rostroad.txt") 
+pyspark> mydata.count() 
+scala> mydata.count() 
+pyspark> mydata.collect() 
+scala> mydata.collect() 
+pyspark> logfile="/nozirev/weblogs/FlumeData.*" 
+scala> var logfile="/nozirev/weblogs/FlumeData.*" 
+pyspark> logs = sc.textFile(logfile) 
+scala> var logs = sc.textFile(logfile) 
+pyspark> jpglogs=\ 
+logs.filter(lambda line: ".jpg" in line) 
+scala> var jpglogs= 
+logs.filter(line => line.contains(".jpg")) 
+pyspark> jpglogs.take(10) 
+scala> jpglogs.take(10) 
+pyspark> sc.textFile(logfile).filter(lambda line: \   ".jpg" in line).count() 
+scala> sc.textFile(logfile).   filter(line => line.contains(".jpg")).count() 
+pyspark> logs.map(lambda line: len(line)).take(5) 
+
+scala> logs.map(line => line.length).take(5) 
+pyspark> logs.map(lambda line: line.split()).take(5) 
+scala> logs.map(line => line.split(' ')).take(5) 
+pyspark> ips = logs.map(lambda line: line.split()[0]) pyspark> ips.take(5) 
+scala> var ips = logs.map(line =>line.split(' ')(0)) scala> ips.take(5) 
+pyspark> for ip in ips.take(10): print ip 
+scala> ips.take(10).foreach(println) 
+pyspark> ips.saveAsTextFile("/nozirev/iplist") 
+scala> ips.saveAsTextFile("/nozirev/iplist") 
+
+spark-shell
+Running a spark application
+
+sc = SparkContext() 
+$ cd $DEV1/exercises/spark-application/ 
+$ spark-submit CountJPGs.py /nozirev/weblogs/* 
+val sc = new SparkContext() $ cd $DEV1/exercises/spark-application/countjpgs 
+$ mvn package 
+spark-submit \ --class stubs.CountJPGs \ target/countjpgs-1.0.jar /nozirev/weblogs/*
+spark-submit \ 
+  --master yarn-client \ 
+  CountJPGs.py /nozirev/weblogs/* 
+$ spark-submit \ 
+  --class stubs.CountJPGs \   --master yarn-client \ 
+  target/countjpgs-1.0.jar /nozirev/weblogs/* 
+Configuring a spark application
+
+$ spark-submit --master yarn-client \ 
+  --name 'Count JPGs' \ 
+  CountJPGs.py /nozirev/weblogs/*  
+$ spark-submit --class stubs.CountJPGs \ 
+  --master yarn-client \   --name 'Count JPGs' \ 
+  target/countjpgs-1.0.jar /nozirev/weblogs/* 
+spark.app.name My Spark App spark.master yarn-client spark.executor.memory 	400M 
+spark-submit --properties-file myspark.conf \ 
+  CountJPGs.py /nozirev/weblogs/*  
+spark-submit --properties-file myspark.conf \   --class stubs.CountJPGs \ 
+  target/countjpgs-1.0.jar /nozirev/weblogs/* 
+Exploring on file based RDD’s
+pyspark --master local[2]
+spark-shell --master local[2]
+pyspark> accounts=sc. \    textFile("/nozirev/accounts/part-m-00000") pyspark> print accounts.toDebugString() 
+scala> var accounts=sc. 
+   textFile("/nozirev/accounts/part-m-00000") scala> accounts.toDebugString 
+pyspark> accountsByID = accounts \   .map(lambda s: s.split(',')) \ 
+  .map(lambda values: \ 
+     (values[0],values[4] + ',' + values[3]))  
+scala> var accountsByID = accounts.   map(line => line.split(',')). 
+  map(values => (values(0),values(4)+','+values(3)))
+pyspark> userreqs = sc \   .textFile("/nozirev/weblogs/*6") \ 
+  .map(lambda line: line.split()) \ 
+  .map(lambda words: (words[2],1)) \ 
+  .reduceByKey(lambda v1,v2: v1+v2) 
+scala> var userreqs = sc.    textFile("/nozirev/weblogs/*6").    map(line => line.split(' ')).    map(words => (words(2),1)).     reduceByKey((v1,v2) => v1 + v2) 
+pyspark> accounthits = accountsByID.join(userreqs)\ 
+  .values() 
+	
+scala> var accounthits =  
+  accountsByID.join(userreqs).map(pair => pair._2) 
+pyspark> accounthits.\ 
+  saveAsTextFile("/nozirev/userreqs") 
+	
+scala> accounthits. 
+  saveAsTextFile("/nozirev/userreqs") 
+pyspark> accounthits\ 
+  .filter(lambda (firstlast,hitcount): hitcount > 5)\   .count() 
+	
+scala> accounthits.filter(pair => pair._2 > 5).count() 
+Using spark SQL for ETL
+sqlContext
+scala> sqlContext.tableNames().foreach(println) 
+pyspark> for table in sqlContext.tableNames(): \   print table 
+scala> val webpagedf = sqlContext.read.table("webpage") 
+	
+pyspark> webpagedf = sqlContext.read.table("webpage") 
+scala> val assocfilesdf =  
+  webpagedf.select($"page_id",$"assoc_files") 
+	
+python> assocfilesdf = \   webpagedf.select(webpagedf.page_id, \   webpagedf.assoc_files) 
+scala> val afilesrdd = assocfilesdf.   map(row => (row.getAs[Short]("page_id"),     row.getAs[String]("assoc_files"))) 
+pyspark> afilesrdd = assocfilesdf.map(lambda row: \   (row.page_id,row.assoc_files)) 
+scala> val afilesrdd2 =   afilesrdd.flatMapValues(filestring =>   filestring.split(',')) 
+	
+pyspark> afilesrdd2 = afilesrdd \   .flatMapValues(lambda \     filestring:filestring.split(',')) 
+scala> import org.apache.spark.sql.Row scala> val afilesrowrdd = afilesrdd2.map(pair => Row(pair._1,pair._2)) 
+scala> val afiledf = sqlContext. 
+  createDataFrame(afilesrowrdd,assocfilesdf.schema) 
+pyspark> afiledf = sqlContext. \ 
+  createDataFrame(afilesrdd2,assocfilesdf.schema) 
+scala> val finaldf = afiledf. 
+  withColumnRenamed("assoc_files","associated_file") 
+pyspark> finaldf = afiledf. \   withColumnRenamed('assoc_files','associated_file') 
+scala> finaldf.write.   mode("overwrite"). 
+  saveAsTable("webpage_files") 
+pyspark> finaldf.write. \   mode("overwrite"). \   saveAsTable("webpage_files")
