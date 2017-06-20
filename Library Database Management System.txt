@@ -1,0 +1,434 @@
+ 
+ 
+ 
+Administrator Details: 
+ 
+User Id Password 1 mot 2 xela  
+Reader Details: 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+TASKS PERFORMED  
+Main menu: 
+Administrator and Reader Function combined in same Frame (ask for user ID and password) 
+2 Administrator 
+50 user  
+ Reader Functions Menu:	100 books added 
+Search a book by ID. 
+Search a book by  title . 
+Search a book my publisher name 
+Book Reserve 
+Book Borrow 
+ Book return 
+Compute fine for a book copy borrowed by a reader based on the current date. 
+NULL if not booked returned yet. 
+Print the book id and titles of books published by a publisher 
+Administrator Functions: 
+Add a book copy. 
+Additional feature added : If a book has a new author ask for Author name , address, contact no and if it has a new publisher ask for publisher name, address and contact no. 
+Add new reader 
+.Print branch information(name and location). 
+Print top 10 most frequent borrowers in a branch and the number of books each has borrowed. 
+Print top 10 most borrowed books in a branch. 
+ 
+ 
+ 
+ 
+1. INTRODUCTION 
+Library Management System provides detailed account of the processes with two administrator?s, fifty readers and more than hundred number of books . 
+The  records information about books that are available in its system. Each book is identified by a unique number BookId, title, author, an ISBN, a publisher, and a publication date.  
+Each book has a single publisher and the publisher address is also recorded. 
+Information about the authors of books is maintained. An author is identified by a number (AuthorId.) The name of each author is also recorded. If the Author is not in database , a new set of AuthorID, Name, Address and contact number is stored. 
+The library system contains several branches, which are identified by a number (LibId). The name and the location of each branch is stored which can be updated later. Each branch of the library holds a number of copies of a particular book. Each copy of the same book kept by the same library branch is numbered from 1 to n. The total number of copies of each book in the library is needed.  
+The library system keeps track of all readers who are identified by ReaderId. Each reader has a name, an address, and a phone number and a reader has to be registered in the database before borrowing a document. 
+Readers have access to the online catalogue of books and may reserve books by title  if they are available. A reserved book has to be picked up before 6 pm? otherwise, the reservation is cancelled. A reader cannot borrow or reserve more than 10 books. 
+Check out is defined as taking out a copy of a book on one date and time and returning it a maximum of 20 days later. RDateTime is the date and time on which the copy of checkout  book is actually returned. (RDateTime is NULL if the document has not yet been returned). Books have to be returned to the branch from which they are borrowed. 
+The same copy of a book can be reserved and/or borrowed by the same reader several times. 
+Books that are not returned on time are fined at a rate of 20 cents for each day after the due date. 
+A copy of a book cannot be lend to more than one reader at a time, but a reader can borrow multiple copies of books. 
+ 
+ 
+ 
+ 
+ 
+ 
+2. ER DATA MODEL DESIGN 
+ 
+ 
+Entities and Attributes 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+? Relationship and its properties: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+3. Logical Design of the Database: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4. Relational Database Design 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+5. Implementation of Database and SQL Queries 
+ 
+? Database Schema 
+ 
+User_Account(?user_id?, password, user_roll, user_name, address, phone?no) 
+ 
+Author(?author_id?,author_name, address, contact_no) 
+ 
+Publisher(?publisher_id?, publisher_name, address, contact_no) 
+ 
+Branch(?lib_id?, name, location) 
+ 
+      Book(?book_id?, title, author_id, isbn, publisher_id, publish_date, no_of_copies,lib_id) 
+ 
+foreign key :author_id, publisher_id, lib_id 
+ 
+Copies(?copy_id?, book_id) 
+ 
+foreign key: book_id 
+ 
+Borrow(?borrow_id, ?copy_id, Bdate, Rdate,user_id, fine) 
+ 
+foreign key:copy_id, user_id 
+ 
+Reserve(reserve_id,copy_id,user_id) 
+ 
+foreign key: copy_id, user_id 
+? SQL Statements that Create Tables and Populate Tables: 
+ 
+AuthorMast: 
+ 
+Create table AuthorMast 
+(author_id varchar(10) PRIMARY KEY, 
+author_name varchar(30), address varchar(50), 
+contact_no numeric(15,0))? 
+ 
+Insert into AuthorMast values(?A001?,?Scott?,?NewYork City?,4569874562)? 
+  
+PublisherMast: 
+ 
+Create table PublisherMast 
+(publisher_id varchar(10) PRIMARY KEY, 
+publisher_name varchar(30), address varchar(50), 
+contact_no numeric(15,0))? 
+ 
+Insert into PublisherMast 
+	Values(?P001?,?? Journal of Medicine Science?,?NewYork City?,5123654778)??	 
+ 
+BranchMast: 
+ 
+Create table BranchMast (lib_id varchar(10) PRIMARY KEY, 
+name varchar(30), 
+location varchar(50))? 
+ 
+Insert into BranchMast values(?L001?,?IT?,?IT Department?)? 
+ 
+User_Account: 
+ 
+Create table User_Account (user_id varchar(15) PRIMARY KEY, 
+password varchar(20), user_roll varchar(10), user_name varchar(20), address varchar(200), 
+phone_no numeric(15,0))? 
+ 
+Insert into User_account values(?123?,?123?,?Admin?,?Bhumesh?,?NJ?,5164552617)? 
+BookMast: 
+ 
+Create table BookMast 
+(book_id varchar(10) PRIMARY KEY, 
+title varchar(50), 
+author_id varchar(10) FOREIGN KEY REFERENCES AuthorMast, isbn varchar(20), 
+publisher_id varchar(10) FOREIGN KEY REFERENCES PublisherMast, no_of_copies numeric(5,0), 
+lib_id varchar(10)) FOREIGN KEY REFERENCES BranchMast? 
+ 
+Insert into BookMast values(?B00001?,?DB?,?A001?,?456987?,?P001?,5,?L001?)? 
+ 
+Copies: 
+ 
+Create table Copies 
+(copy_id varchar(20) PRIMARY KEY, 
+book_id varchar(10) FOREIGN KEY REFERENCES BookMast)? 
+ 
+Insert into Copies values(?B00001C01?,?B00001?)? 
+ 
+Borrow: 
+ 
+Create table Borrow 
+(borrow_id varchar(10) PRIMARY KEY, 
+copy_id varchar(20) FOREIGN KEY REFERENCES Copies, 
+BDate DateTime, RDate DateTime, 
+user_id varchar(10) FOREIGN KEY REFERENCES User_Account, fine numeric)? 
+ 
+Insert into Borrow values(?B00001?,?B00001C01?,?04/25/2014?,NULL,?123?,NULL)? 
+ 
+Reserve: 
+ 
+Create table Borrow 
+(reserve_id varchar(10) PRIMARY KEY, copy_id varchar(20) FOREIGN KEY REFERENCES Copies, user_id varchar(10) FOREIGN KEY REFERENCES User_Account)? 
+ 
+Insert into Reserve values(?R00001?,?B00001C01?,?123?)? 
+ 
+ 
+? SQL queries: 
+ 
+a. Print the list of book reserved by a reader: 
+SELECT b.book_id, b.title, a.author_name, b.isbn, p.publisher_name, b.publish_date, b.no_of_copies, c.name 
+FROM BookMast AS b INNER JOIN AuthorMast AS a ON b.author_id = a.author_id INNER JOIN PublisherMast AS p ON b.publisher_id = 
+p.publisher_id INNER JOIN BranchMast AS c ON b.lib_id = c.lib_id  
+WHERE (b.book_id NOT IN (SELECT book_id  
+FROM Copies WHERE (copy_id IN (SELECT copy_id FROM Reserve)) 
+and (copy_id IN (SELECT copy_id FROM Borrow where fine IS NOT NULL))))? 
+ 
+b. Print the book id and titles of books published by a publisher: 
+Select book_id as Book_ID,title as Title  From BookMast b, PublisherMast p  
+where b.publisher_id=p.publisher_id and p.publisher_name=??Journal of Medicine Science?"? 
+ 
+c. Print branch information (name and location): Select * From BranchMast? 
+ 
+d. Print top 10 most frequent borrowers in a branch and the number of books each has borrowed: 
+SELECT u.user_name AS User_Name, COUNT(b.borrow_id) AS Total_Count  
+FROM Borrow b, User_Account u  
+WHERE b.user_id = u.user_id  
+GROUP BY b.user_id, u.user_name  
+ORDER BY Total_Count DESC? 
+ 
+e. Print top 10 most borrowed books in a branch: 
+SELECT a.title as Title, COUNT(b.borrow_id) AS Total_Count 
+FROM Borrow b, Copies c, BookMast a 
+Where b.copy_id = c.copy_id and c.book_id=a.book_id 
+GROUP BY b.copy_id, c.book_id, a.title? 
+ 
+ 
+f. Find the average fine paid per reader: 
+Select u.user_name as User_Name,Avg(b.fine) as Avg_Fine  
+From Borrow b, User_Account u  
+Where b.user_id=u.user_id  
+Group By b.user_id,u.user_name? 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+6. Application Design 
+ 
+ 
+Task : 1  
+? Login 
+ 
+ 
+ 
+Admin and Reader  both have to enter their User Id and Password to access their given rights. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+After entering the admin ID and password  
+ 
+Admin has access to add/update/delete Books, Users and Branches. 
+Admin can check all borrower list, all borrowed books list and list of average fine paid by all users. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+After Entering the Reader ID and password 
+ 
+ 
+ 
+ 
+Task 2 :  
+ 
+Search by ID  
+ 
+ 
+ 
+ 
+Search by Title 
+ 
+ 
+Search by publisher 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Task 2.2 Book Reserve 
+ 
+ 
+? Borrow the book 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Do you want  to return the book  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fine payment 
+ 
+ 
+Print the book id and titles of books published by a publisher. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Administrative Functions: 
+ 
+Add a Book 
+ 
+ 
+ 
+ 
+ 
+ 
+Add a new reader  
+ 
+. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Print branch information ( name and location) 
+ 
+ 
+ 
+ 
+Print top 10 most frequent borrowers in a branch and the number of books each has borrowed.? 
+ 
+ 
+Print top 10 most borrowed books in a branch 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
