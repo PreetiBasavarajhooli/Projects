@@ -1,21 +1,12 @@
- 
- 
- 
 Administrator Details: 
+User Id 
+Password 
+1 
+mot 
+2 
+xela 
  
-User Id Password 1 mot 2 xela  
 Reader Details: 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
 TASKS PERFORMED  
 Main menu: 
 Administrator and Reader Function combined in same Frame (ask for user ID and password) 
@@ -39,10 +30,7 @@ Add new reader
 Print top 10 most frequent borrowers in a branch and the number of books each has borrowed. 
 Print top 10 most borrowed books in a branch. 
  
- 
- 
- 
-1. INTRODUCTION 
+ 1. INTRODUCTION 
 Library Management System provides detailed account of the processes with two administrator?s, fifty readers and more than hundred number of books . 
 The  records information about books that are available in its system. Each book is identified by a unique number BookId, title, author, an ISBN, a publisher, and a publication date.  
 Each book has a single publisher and the publisher address is also recorded. 
@@ -55,85 +43,9 @@ The same copy of a book can be reserved and/or borrowed by the same reader sever
 Books that are not returned on time are fined at a rate of 20 cents for each day after the due date. 
 A copy of a book cannot be lend to more than one reader at a time, but a reader can borrow multiple copies of books. 
  
- 
- 
- 
- 
- 
-2. ER DATA MODEL DESIGN 
- 
- 
-Entities and Attributes 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-? Relationship and its properties: 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-3. Logical Design of the Database: 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-4. Relational Database Design 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-5. Implementation of Database and SQL Queries 
- 
-? Database Schema 
- 
-User_Account(?user_id?, password, user_roll, user_name, address, phone?no) 
+ 3. Implementation of Database and SQL Queries 
+
+ User_Account(?user_id?, password, user_roll, user_name, address, phone?no) 
  
 Author(?author_id?,author_name, address, contact_no) 
  
@@ -227,9 +139,8 @@ Create table Borrow
 (reserve_id varchar(10) PRIMARY KEY, copy_id varchar(20) FOREIGN KEY REFERENCES Copies, user_id varchar(10) FOREIGN KEY REFERENCES User_Account)? 
  
 Insert into Reserve values(?R00001?,?B00001C01?,?123?)? 
- 
- 
-? SQL queries: 
+
+3. SQL queries: 
  
 a. Print the list of book reserved by a reader: 
 SELECT b.book_id, b.title, a.author_name, b.isbn, p.publisher_name, b.publish_date, b.no_of_copies, c.name 
@@ -264,166 +175,30 @@ Select u.user_name as User_Name,Avg(b.fine) as Avg_Fine
 From Borrow b, User_Account u  
 Where b.user_id=u.user_id  
 Group By b.user_id,u.user_name? 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-6. Application Design 
- 
- 
-Task : 1  
-? Login 
- 
- 
+ 6. Application Design 
  
 Admin and Reader  both have to enter their User Id and Password to access their given rights. 
- 
- 
- 
- 
- 
- 
  
 After entering the admin ID and password  
  
 Admin has access to add/update/delete Books, Users and Branches. 
 Admin can check all borrower list, all borrowed books list and list of average fine paid by all users. 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 After Entering the Reader ID and password 
- 
- 
- 
- 
-Task 2 :  
+ Task 2 :  
  
 Search by ID  
- 
- 
- 
- 
 Search by Title 
- 
- 
 Search by publisher 
- 
- 
- 
- 
- 
- 
- 
- 
 Task 2.2 Book Reserve 
- 
- 
-? Borrow the book 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+Borrow the book 
 Do you want  to return the book  
- 
- 
- 
- 
- 
- 
- 
- 
- 
 Fine payment 
- 
- 
 Print the book id and titles of books published by a publisher. 
- 
- 
- 
- 
- 
- 
- 
- 
 Administrative Functions: 
- 
 Add a Book 
- 
- 
- 
- 
- 
- 
 Add a new reader  
- 
-. 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 Print branch information ( name and location) 
- 
- 
- 
- 
 Print top 10 most frequent borrowers in a branch and the number of books each has borrowed.? 
- 
- 
 Print top 10 most borrowed books in a branch 
  
  
