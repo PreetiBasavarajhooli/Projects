@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Table of contents
 
 1. Introduction
@@ -25,75 +11,25 @@ Table of contents
 6. Conclusion
 7. Reference
 
-
-
-
-
-
-
 1. INTRODUCTION
-The aim of our project is to design a privacy preserving protocol using a technique called Garbled circuit. This technique is based on Andrew Yaoís protocol for secure function evaluation (SFE). The Garbled circuit allows two parties to securely evaluate any function represented as a Boolean Circuit. Secure function evaluation is also termed as Secure Multiparty communication. 
+The aim of our project is to design a privacy preserving protocol using a technique called Garbled circuit. This technique is based on Andrew Yao‚Äôs protocol for secure function evaluation (SFE). The Garbled circuit allows two parties to securely evaluate any function represented as a Boolean Circuit. Secure function evaluation is also termed as Secure Multiparty communication. 
 
-Secure Multiparty communication permits multiple parties to cooperatively evaluate a function only revealing the functionís output and no other information [1]. SFE is a category of a cryptographic technique. SFE allows multiple parties to jointly compute some function over their input, sustaining the privacy of the inputs.
+Secure Multiparty communication permits multiple parties to cooperatively evaluate a function only revealing the function‚Äôs output and no other information [1]. SFE is a category of a cryptographic technique. SFE allows multiple parties to jointly compute some function over their input, sustaining the privacy of the inputs.
 
-Assume we have multiple parties computing some function of their input. The communicating parties would be willing to never get their information disclosed to the other parties involved in the communication. The challenging situation arises at the instance when the parties try to gain knowledge about the inputs of the other parties. To preserve the security of the inputs from the part seems to be demanding. A protocol based on garbled circuit is designed to ensure the privacy of the userís data. 
+Assume we have multiple parties computing some function of their input. The communicating parties would be willing to never get their information disclosed to the other parties involved in the communication. The challenging situation arises at the instance when the parties try to gain knowledge about the inputs of the other parties. To preserve the security of the inputs from the part seems to be demanding. A protocol based on garbled circuit is designed to ensure the privacy of the user‚Äôs data. 
 
 Garbled circuit is a garbling scheme with components G = (Gb, En, De, Ev, ev) where Gb is a garbling function, En is used for encoding, De is used for decoding, Ev generate output Y by computing the input X with function F and ev generates output y by computing the input x with function f. The Garbled circuit protocol transforms a given function into Boolean circuit. These Boolean circuit is built with different logic gates like AND and XOR. Inputs and outputs of each of the gates will be masked, hence the parties communicating do not acquire any information about the inputs of the other parties.
 
-Assume there are two parties, Alice and Bob. Alice prepares garbled circuit and picks two random keys for each wire, one key corresponding to 0 and the other key corresponding to 1. Alice encrypts each row of the truth table by encrypting the output wire key with the corresponding pair of input wire key. Alice randomly permutes encrypted garbled truth table and sends it to Bob. The input from Alice is two random keys corresponding to Bobís wire. The input from Bob is one bit input on the wire in oblivious transfer. Neither of the two parties will learn the intermediate values. In case, if the parties try to cheat, the input tends to remain secure because Bob does not learn whether the keys of Alice correspond to 0 or 1. Bob also does not disclose his intermediate wire keys to Alice. Bob only informs Alice about the key for the  final output wire and in return Alice replies by informing Bob whether the corresponds to 0 or 1. Bob evaluates the entire garbled circuit in topological order, computing one key for each output wire of the circuit.
+Assume there are two parties, Alice and Bob. Alice prepares garbled circuit and picks two random keys for each wire, one key corresponding to 0 and the other key corresponding to 1. Alice encrypts each row of the truth table by encrypting the output wire key with the corresponding pair of input wire key. Alice randomly permutes encrypted garbled truth table and sends it to Bob. The input from Alice is two random keys corresponding to Bob‚Äôs wire. The input from Bob is one bit input on the wire in oblivious transfer. Neither of the two parties will learn the intermediate values. In case, if the parties try to cheat, the input tends to remain secure because Bob does not learn whether the keys of Alice correspond to 0 or 1. Bob also does not disclose his intermediate wire keys to Alice. Bob only informs Alice about the key for the  final output wire and in return Alice replies by informing Bob whether the corresponds to 0 or 1. Bob evaluates the entire garbled circuit in topological order, computing one key for each output wire of the circuit.
 
 The protocol using garbled circuit has its application in the field of biometrics as well. It can be used for Biometric Authentication. Authentication of data using the Biometric involves three stages: Enrollment Phase, Feature Extraction Phase and Template Matching Phase. The Biometric information of the user is provided during the Enrollment Phase, where the feature will be extracted and stored as a template. During the Authentication Phase, the biometric sample of the user is provided. Using the biometric sample, the feature of the user will be extracted. The authentication system, matches the testing sample with the template which is 
-marked as Template Matching Phase. During the enrollment phase, the user provides his biometric data on any server. After the biometric data is provided, biometric template will be created and stored on the database server. During the Authentication phase, user provides another biometric sample. This biometric sample will be compared with the template store on the server. The user template consists of crucial information that must never get disclosed. If this information gets revealed, the userís template will allow the adversary to obtain sufficient information to impersonate userís data. The protocol using garbled circuit helps in preventing adversary form learning the template from the user. 
+marked as Template Matching Phase. During the enrollment phase, the user provides his biometric data on any server. After the biometric data is provided, biometric template will be created and stored on the database server. During the Authentication phase, user provides another biometric sample. This biometric sample will be compared with the template store on the server. The user template consists of crucial information that must never get disclosed. If this information gets revealed, the user‚Äôs template will allow the adversary to obtain sufficient information to impersonate user‚Äôs data. The protocol using garbled circuit helps in preventing adversary form learning the template from the user. 
 
-In this project, we designed a protocol that preserves the privacy of the userís data while the data is being sent to the other parties that are involved in the computation of the Euclidean distance.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+In this project, we designed a protocol that preserves the privacy of the user‚Äôs data while the data is being sent to the other parties that are involved in the computation of the Euclidean distance.
 2. MOTIVATING EXAMPLES
 The protocol using garbled circuit has its application in the real life scenarios. It is also used in the field of Biometrics. To understand, how this protocol will be implemented in Biometrics, let us consider an example of the immigration services that are enforced by law across all the airports in the world. Matching of the biometric data is essential in Immigration services allow the immigrants to enter the country. These types of services consist of systems having databases composed of biometrics of individuals like fingerprints, face recognition already stored in the system. When an individual enter a country for the first time, his biometric will be captured. The captured biometric should match to the biometric that is stored in the system, to authenticate that the individual is the same person. This matching is critical to allow the individual to enter the country.
 
-For instance, consider an individual named Ajay. He is an Indian citizen traveling to New Jersey from Mumbai. There is one server side database that has Ajayís biometrics. When he reaches USA, the immigration officials at the airport, will capture Ajayís fingerprints. They will capture his face and retina scan using the Biometric Scanner. This candidate biometric readings is sent to the server for verifying authenticity of the candidate. After successful matching of the biometrics, the USCIS officials will allow Ajay to enter the USA. During this whole procedure, the server side database and the client side database play a vital role as they check the biometric data. The server side database will not just have one record, it will be composed of thousands to millions of records. Let us denote the template of Ajay as v = (d,p) where d is the biometric data and p is the profile details like name, address and phone number. The biometric data collected at the airport, creates a template named v*. This template v* will look for the matching template in the server side database. There are chances at the template on the server side database, might try to cheat thereby leading to the leakage of the information. Biometric data of an individual are a very confidential information. If leaked, it can create blunders. To prevent this situation, we can use the protocol using the garbled circuit. This protocol is efficient in maintaining the privacy of an individualís data compared to the other protocols. By deploying this protocol at the server side database as well as the client side database, we can prevent both from learning each other data. All they can do is match the incoming template with the templates that are stored in the server side database and give a reply to client side database whether the templates is genuine or imposter. In this manner, the protocol using the garbled circuit ensures the privacy of the userís confidential data.
-
-
-
-
-
-
-
-
-
-
-
+For instance, consider an individual named Ajay. He is an Indian citizen traveling to New Jersey from Mumbai. There is one server side database that has Ajay‚Äôs biometrics. When he reaches USA, the immigration officials at the airport, will capture Ajay‚Äôs fingerprints. They will capture his face and retina scan using the Biometric Scanner. This candidate biometric readings is sent to the server for verifying authenticity of the candidate. After successful matching of the biometrics, the USCIS officials will allow Ajay to enter the USA. During this whole procedure, the server side database and the client side database play a vital role as they check the biometric data. The server side database will not just have one record, it will be composed of thousands to millions of records. Let us denote the template of Ajay as v = (d,p) where d is the biometric data and p is the profile details like name, address and phone number. The biometric data collected at the airport, creates a template named v*. This template v* will look for the matching template in the server side database. There are chances at the template on the server side database, might try to cheat thereby leading to the leakage of the information. Biometric data of an individual are a very confidential information. If leaked, it can create blunders. To prevent this situation, we can use the protocol using the garbled circuit. This protocol is efficient in maintaining the privacy of an individual‚Äôs data compared to the other protocols. By deploying this protocol at the server side database as well as the client side database, we can prevent both from learning each other data. All they can do is match the incoming template with the templates that are stored in the server side database and give a reply to client side database whether the templates is genuine or imposter. In this manner, the protocol using the garbled circuit ensures the privacy of the user‚Äôs confidential data.
 
 3. RELATED WORK
 Secure function evaluation and garbled circuit has been a subject of immense amount of research. The full practical implementation of the secure function evaluation using Garbled circuit is Fairplay. Fairplay is a full fledged system that implements the generic secure function evaluation. It comprises a high level procedural definition language termed as SFDL that is tailored to the SFE paradigm [2].  
@@ -104,46 +40,16 @@ Koleshinkov and Schnedier [3] presented an innovative garbled circuit constructi
 
 Kolesnikov, Sadeghi and Schneider [3], proposed an advanced model of the state of SFE, for subtraction and comparison functions. They achieved this constructing most efficient garbled circuit representation. The semi honest model was the most suitable for most of the applications as well as it was secure. The xor gates are evaluated for free which means that XOR operations are evaluated without performing any cryptographic operation. The protocol also demonstrated how the comparison is carried out as well the other basic functions with the use of circuits mostly consisting of only xor. This resulted in reducing the size of the garbed circuit.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 4. DEFINITION OF FUNCTIONALITY
-Our team designed a protocol that ensures the privacy of the userís data. The garbled circuit is based on Andrew Yaoís protocol. This protocol computes any function securely. Initially, Euclidean distance function to be computed is converted to a Boolean circuit. One of the communicating party say Alice, will prepare a garbled circuit and send it to the other communicating party say Bob. The inputs from Alice are encrypted. Bob also encrypts his inputs. Using the garbled circuit, the encrypted input of Alice and encrypted input of Bob computes an encryption function. This encrypted function will be sent to Alice. Alice, then decrypts the encrypted function and send it Bob. Using this protocol, Bob never sees Aliceís inputs. He also obtains an encryption of his input without Alice learning his inputs. Neither Bob nor does Alice get to know the intermediate values. Hence even if the parties try to cheat, the inputs remain secure.
+Our team designed a protocol that ensures the privacy of the user‚Äôs data. The garbled circuit is based on Andrew Yao‚Äôs protocol. This protocol computes any function securely. Initially, Euclidean distance function to be computed is converted to a Boolean circuit. One of the communicating party say Alice, will prepare a garbled circuit and send it to the other communicating party say Bob. The inputs from Alice are encrypted. Bob also encrypts his inputs. Using the garbled circuit, the encrypted input of Alice and encrypted input of Bob computes an encryption function. This encrypted function will be sent to Alice. Alice, then decrypts the encrypted function and send it Bob. Using this protocol, Bob never sees Alice‚Äôs inputs. He also obtains an encryption of his input without Alice learning his inputs. Neither Bob nor does Alice get to know the intermediate values. Hence even if the parties try to cheat, the inputs remain secure.
 
 In our project, the communicating parties are trying to compute Euclidean distance over their inputs. Euclidean Distance is nothing but the distance computation between two points. For example, we have two points a and b. The Euclidean distance between two set a and b will be given by the following formula:
                      n
-      d(a,b)  = ? (bi ñ ai)2
+      d(a,b)  = ? (bi ‚Äì ai)2
                                 i=1
 SFE protocol is used for computing the Euclidean distance for finding the closest match between a point held by one party and a set of points held by another party.
 
 During Fingerprint recognition process, In Enrollment phase, When Alice registers herself to Bob, Alice creates an encrypted template and sends to Bob who store encrypted template of Alice in a database. In Authentication phase, Alice and Bob carry out protocol Euclidean Distance to compute the blind distance of the minutiae. Alice learns the blind distance and the remaining task is accomplished by garbled circuits. Then, the closest matching difference is found between the template stored in the database and the query template. The claimed user is genuine if minutiae difference is smaller than the threshold otherwise user is imposter. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 5. GENERIC CIRCUIT
 The generalized circuit for the protocol designed consists of subtractor, multiplier and an adder. Using this circuit, Euclidean circuit between two points is calculated. The generalized circuit for the privacy preserving protocol using garbled circuit is as depicted below. As shown in the figure below, the one block will be repeated m number of times depending on the number of inputs. The different parts of the diagram comprise of different logic gates explained later on in this section.
@@ -151,108 +57,41 @@ The generalized circuit for the protocol designed consists of subtractor, multip
 
 Figure 1: Generalized circuit diagram
 
-Assume we have two parties willing to jointly compute some function using their inputs. One party is Alice and the other party is Bob. Referring the generalized diagram, each of Alice and Bob are n bit inputs. The inputs to the subtractor circuit is one bit from Alice and one bit from Bob. These imply, the inputs to Alice are x0, x1 and x2 respectively. Similarly the inputs to Bob are y0, y1 and y2 respectively. Taking one bit from Alice and one bit from Bob, the subtractor circuit performs the subtraction. For example, the subtractor circuit takes input x0 from Alice as well as y0 from Bob and perform (x0 ñ y0). The after, (x0 ñ y0) becomes the input to the multiplier circuit and (x0 ñ y0)2 is computed. Following the similar pattern, (x1 ñ y1)2 will be computed continuing until all the bits are computed. Finally then n bit adder circuit adds up the squared output, which is the Euclidean distance. The detailed explanation of the circuit explained in detail in the following sections. 
+Assume we have two parties willing to jointly compute some function using their inputs. One party is Alice and the other party is Bob. Referring the generalized diagram, each of Alice and Bob are n bit inputs. The inputs to the subtractor circuit is one bit from Alice and one bit from Bob. These imply, the inputs to Alice are x0, x1 and x2 respectively. Similarly the inputs to Bob are y0, y1 and y2 respectively. Taking one bit from Alice and one bit from Bob, the subtractor circuit performs the subtraction. For example, the subtractor circuit takes input x0 from Alice as well as y0 from Bob and perform (x0 ‚Äì y0). The after, (x0 ‚Äì y0) becomes the input to the multiplier circuit and (x0 ‚Äì y0)2 is computed. Following the similar pattern, (x1 ‚Äì y1)2 will be computed continuing until all the bits are computed. Finally then n bit adder circuit adds up the squared output, which is the Euclidean distance. The detailed explanation of the circuit explained in detail in the following sections. 
 
 5.1 n Bit Subtractor
 The binary subtraction of the multibit numbers involves three essential inputs, the minuend, the subtrahend and borrow. The output is the difference bit and the borrow bit. The n bit subtractor includes XOR and AND logic gates.  In our project, we have taken 3 bit subtractor. The diagram of the 3 bit subtractor is as listed below:
 
-
-
-Figure 2:  3 bit subtractor
-
-In this section, we have taken an example to show how the 3 bit subtractor works. Consider we have two inputs. One being X and the other being Y. X ={1, 1, 1} implying that x0 = 1, x1 = 1 and x2 = 1 respectively. Correspondingly Y = {1, 0, 1} implying that y0 = 1, y1 = 0 and y2 = 1 respectively. The 3 bit subtractor will take X0 = 1 and Y0 = 1 and perform the subtraction. The initial carry would be one. The subtractor includes carry forward. In our case we will have three one bit subtractor blocks that will perform the subtraction. The carry obtained in each block will forwarded to the next block. The output of this block will be (x0 ñ y0), (x1 ñ y1) and (x2 ñ y2). Following the subtractor block is the multiplier block. (Introduced in section 4.2)
+In this section, we have taken an example to show how the 3 bit subtractor works. Consider we have two inputs. One being X and the other being Y. X ={1, 1, 1} implying that x0 = 1, x1 = 1 and x2 = 1 respectively. Correspondingly Y = {1, 0, 1} implying that y0 = 1, y1 = 0 and y2 = 1 respectively. The 3 bit subtractor will take X0 = 1 and Y0 = 1 and perform the subtraction. The initial carry would be one. The subtractor includes carry forward. In our case we will have three one bit subtractor blocks that will perform the subtraction. The carry obtained in each block will forwarded to the next block. The output of this block will be (x0 ‚Äì y0), (x1 ‚Äì y1) and (x2 ‚Äì y2). Following the subtractor block is the multiplier block. (Introduced in section 4.2)
 
 5.2 Multiplier
 The multiplier block unfolds the task of multiplying the output obtained from the subtractor.
 The figure below shows the subtractor circuit.
-
-
-Figure 3: Multiplier
-
-
-Considering the above diagram the binary adder can be appended with N zero bits to bring the resultant N bit output. In the above diagram, the adder is appended with the eight '0' bits. Considering the multiplicand is '1001' and the multiplier is '1001'.The multiplicand is first multiplied by '1' and the result is added in the adder and do one left shift on multiplicand. For the second operation, it is multiplied by '0' than '0' and finally '1'. The entire procedure follows the simple operation of multiplying the multiplicand by the partial bit of the multiplier, shifting it one bit left after the operation and adding into the adder. Performing the above procedure the result of multiplying '1001' by '1001' gives the final output '01010001'.
+Considering the binary adder can be appended with N zero bits to bring the resultant N bit output. In the above diagram, the adder is appended with the eight '0' bits. Considering the multiplicand is '1001' and the multiplier is '1001'.The multiplicand is first multiplied by '1' and the result is added in the adder and do one left shift on multiplicand. For the second operation, it is multiplied by '0' than '0' and finally '1'. The entire procedure follows the simple operation of multiplying the multiplicand by the partial bit of the multiplier, shifting it one bit left after the operation and adding into the adder. Performing the above procedure the result of multiplying '1001' by '1001' gives the final output '01010001'.
 
 5.3 n bit Adder
 The n bit adder is used to as add the output obtained from the multiplier (introduced in section 4.2). This n bit adder will give us the Euclidean distance.
 The n bit adder is as shown below:
-
- 
-Figure 4: n bit Adder
-
 We have used 8 bit adder in our project as shown in the figure 5. The 8 bit adder circuit consists of AND and XOR logic gates. The multiplier circuit generates two outputs each of them being of 8 bits. These outputs of the multiplier circuit are the inputs to the adder circuit. To understand the function of the adder circuit, Assume, the two 8 bit output from the multiplier circuit are A = 01010001 and B = 01010001. Here, we assume both of A and B to be the same. In practical circumstances, these values may differ.
 
      Now A0 = 0, A1 = 1, A2 = 0, A3 = 1, A4 = 0, A5 = 0, A6 = 0 and A7 =1 respectively. Likewise 
 B0 = 0, B1 = 1, B2 = 0, B3 = 1, B4 = 0, B5 = 0, B6 = 0 and B7 =1 respectively.
 
-
-Figure 5: 8 bit Adder Circuit
-
-
 The 8 bit adder consists of 8 individual blocks. The individual block inside the full adder is a half adder circuit consisting of XOR and AND logic gates. The inputs to the first block will be A0, B0 and Cin respectively. Cin is the initial carry which is 0 at the beginning. There is a carry forward mechanism deployed in the adder meaning that they carry generated at every stage will be forwarded to the next stage. In the second block, the inputs are A1, B1 and Cout(carry generated at the first stage). This procedure will be followed by all the inputs from A0 till A7 as well as B0 till B7 are computed. The final output of the adder circuit is the Euclidean distance between the two points.
-
-
-
-
-
-
-
-
-
-
-
-
 6. CONCLUSION
-Our project was aimed at conserving the privacy of the userís data. The garbled circuit plays an active role in controlling the secrecy of the user's data. These can be used in the fields where confidentiality is the main concern. Our team designed a protocol using the garbled circuit for secure multiparty communication. Using an example of two parties that are willing to jointly compute some function over their input, we designed a protocol that does not disclose any additional information. The two communicating parties are unaware of each others input. All they know are the keys, they sent to each other during the communication process. The two communicating parties, calculate the Euclidean distance over their inputs.   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Our project was aimed at conserving the privacy of the user‚Äôs data. The garbled circuit plays an active role in controlling the secrecy of the user's data. These can be used in the fields where confidentiality is the main concern. Our team designed a protocol using the garbled circuit for secure multiparty communication. Using an example of two parties that are willing to jointly compute some function over their input, we designed a protocol that does not disclose any additional information. The two communicating parties are unaware of each others input. All they know are the keys, they sent to each other during the communication process. The two communicating parties, calculate the Euclidean distance over their inputs.   
 
 7. REFERENCES
 
 [1] Yua Huang, David Evans, Jonathan Katz, (University of Maryland), Lior Malka (Intel)
-ìFaster secure two party computation using Garbled Circuits.î
+‚ÄúFaster secure two party computation using Garbled Circuits.‚Äù
 
-[2] Dahlia Malkhi, Noam Nisan, Benny Pinkas, Yaron Sella, The School Of Computer Science and Enginneering, The herbrews university if Jersalem, ì Fiarplay ñ A secure two party computation using Garbled Circuit.î
+[2] Dahlia Malkhi, Noam Nisan, Benny Pinkas, Yaron Sella, The School Of Computer Science and Enginneering, The herbrews university if Jersalem, ‚Äú Fiarplay ‚Äì A secure two party computation using Garbled Circuit.‚Äù
 
-[3] Vladimir Kolesnikov, Thomas Schneider, Bell Laboratories, ìImproved Garbled Circuit: Free XOR gates and Applications.î
+[3] Vladimir Kolesnikov, Thomas Schneider, Bell Laboratories, ‚ÄúImproved Garbled Circuit: Free XOR gates and Applications.‚Äù
 
-[4] Vladimir Kolesnikov, Ahmad Reza Sadeghi, Thomas Schneider, Bell Laboratories, ìImproved Garbled Circuit Building Blocks and applications to Auctions and Computing Minima.î
+[4] Vladimir Kolesnikov, Ahmad Reza Sadeghi, Thomas Schneider, Bell Laboratories, ‚ÄúImproved Garbled Circuit Building Blocks and applications to Auctions and Computing Minima.‚Äù
  
 
-DESIGNING PRIVACY PRESERVING PROTOCOL
-1
 
 
